@@ -1,0 +1,34 @@
+{
+  "name": "express-clonium",
+  "version": "1.0.0",
+  "description": "Servidor del juego clonium",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hectorv72/express-clonium.git"
+  },
+  "author": "Hector Valdez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hectorv72/express-clonium/issues"
+  },
+  "homepage": "https://github.com/Hectorv72/express-clonium#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
