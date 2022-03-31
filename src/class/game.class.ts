@@ -1,6 +1,8 @@
-import Board, { IObjectBoard } from './board.class';
-// import Box from './box.class';
-import Player, { IPlayer } from './player.class';
+import Board, { IObjectBoard } from '@class/board.class';
+import Box from '@class/box.class';
+import Player, { IPlayer } from '@class/player.class';
+import { actionClickChip } from './methods/actionClickChip.game';
+import { watchChanges } from './methods/watchChanges.game';
 
 export interface IGame {
   players: Array<Player>,
@@ -39,7 +41,7 @@ class Game {
   }
 
   public getObjectGame () : IObjectGame {
-    const players = this._players.map(
+    const players : Array<IPlayer> = this._players.map(
       player => player.getPlayer()
     );
 
@@ -51,10 +53,11 @@ class Game {
     };
   }
 
-  // private watchChanges () {
-  //   const board = this._gameboard.getBoard();
-  //   board.map()
-  // }
+  private watchChanges () {
+    const game = this.getGame();
+    watchChanges(game);
+    // console.log(changes);
+  }
 
   private nextTurn () {
     if (this._turn >= this._players.length) {
@@ -64,11 +67,20 @@ class Game {
     }
   }
 
-  // public actionAddPoint (player:Player, row:number) {
-  //   if (this._turn.getTurn() === player.getTurn()) {
-
-  //   }
-  // }
+  public async actionClickChip (player: Player, row: number, col: number) {
+    const game : IGame = this.getGame();
+    try {
+      const action = await actionClickChip(game, player, row, col);
+      if (action) {
+        this.nextTurn();
+        this.watchChanges();
+      } else {
+        console.log('actionClickChip promise response => ', action);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export default Game;

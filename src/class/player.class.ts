@@ -18,7 +18,15 @@ class Player {
     this._turn = turn;
   }
 
-  public getTurn = () : number => {
+  public get name () : string {
+    return this._name;
+  }
+
+  public set name (name: string) {
+    this._name = name;
+  }
+
+  public get turn () : number {
     return this._turn;
   }
 

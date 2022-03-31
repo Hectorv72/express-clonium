@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Servidor del juego clonium",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
-    "test": "concurrently \" tsc -w \" \" nodemon ./dist/src/index.js \""
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "start-dist": "node dist/index.js",
+    "deva": "ts-node-dev --respawn --transpile-only ./src/index.ts",
+    "dev-test": "concurrently \" tsc -w \" \" node ./dist/src/index.js \""
   },
   "repository": {
     "type": "git",
@@ -36,6 +39,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "morgan": "^1.10.0",
-    "ts-node-dev": "^1.1.8"
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "tsconfig-paths": "^3.14.1"
   }
 }

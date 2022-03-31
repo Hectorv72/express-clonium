@@ -1,25 +1,25 @@
-import Chip, { IObjectChip } from './chip.class';
-import Player from './player.class';
+import Chip, { IObjectChip } from '@class/chip.class';
+import Player from '@class/player.class';
 
 export interface IBox {
   id: number,
   row:number,
   col:number,
-  chip: Chip,
+  chip: Chip | undefined,
 }
 
 export interface IObjectBox{
   id: number,
   row:number,
   col:number,
-  chip: IObjectChip,
+  chip: IObjectChip | undefined,
 }
 
 class Box {
   private _id : number;
   private _row : number;
   private _col : number;
-  private _chip : Chip;
+  private _chip : Chip | undefined;
 
   constructor (id:number, row:number, col:number) {
     this._id = id;
@@ -27,12 +27,16 @@ class Box {
     this._col = col;
   }
 
-  public set chip (chip:Chip) {
+  public set chip (chip:Chip | undefined) {
     this._chip = chip;
   }
 
-  public get chip () : Chip {
-    return this._chip;
+  public get chip () : Chip | undefined {
+    return this._chip || undefined;
+  }
+
+  public removeChip () {
+    this._chip = undefined;
   }
 
   public getBox () : IBox {
@@ -40,7 +44,7 @@ class Box {
       id: this._id,
       row: this._row,
       col: this._col,
-      chip: this._chip
+      chip: this._chip || undefined
     };
   }
 

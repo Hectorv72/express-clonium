@@ -1,4 +1,4 @@
-import Player, { IPlayer } from './player.class';
+import Player, { IPlayer } from '@class/player.class';
 
 export interface IChip{
   player : Player,
