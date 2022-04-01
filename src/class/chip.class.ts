@@ -1,4 +1,4 @@
-import Player, { IPlayer } from '@class/player.class';
+import Player, { IObjectPlayer, IPlayer } from '@class/player.class';
 
 export interface IChip{
   player : Player,
@@ -6,7 +6,7 @@ export interface IChip{
 }
 
 export interface IObjectChip{
-  player : IPlayer,
+  player : IObjectPlayer,
   value: number
 }
 
@@ -48,7 +48,7 @@ export class Chip {
 
   public getObjectChip () : IObjectChip {
     return {
-      player: this._player.getPlayer(),
+      player: this._player.getObjectPlayer(),
       value: this._value
     };
   }

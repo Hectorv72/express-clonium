@@ -2,7 +2,7 @@ import Player from '@class/player.class';
 import Box from '@class/box.class';
 import { IGame } from '@class/game.class';
 
-export const actionClickChip = (game: IGame, player: Player, row: number, col: number) : Promise<boolean> => {
+export const actionClickChip = (game: IGame, player: Player, row: number, col: number) : Promise<boolean> => {  
   return new Promise((resolve, reject) => {
     const { players, turn, gameboard } = game;
     const validation_player_in_game = players.some((element: Player) => element.name === player.name);

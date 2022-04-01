@@ -2,7 +2,7 @@ import Box from '@class/box.class';
 import Board from '@class/board.class';
 import Player from '@class/player.class';
 import { IGame } from '@class/game.class';
-// import { io } from '@connection/socket';
+import { io } from '@connection/socket';
 
 // ejecuta la accion de agregar una ficha a la casilla
 const addChipPosition = (board : Board, player : Player | undefined, row : number, col : number) => {
@@ -63,7 +63,7 @@ export const watchChanges = (game : IGame) => {
       (box : Box) =>
         multiplicateChip(gameboard, box, box.chip?.player)
     );
-    // io.to(game.room).emit()
+    // io.to(game.room).emit('update-board');
     watchChanges(game);
   }
 };
