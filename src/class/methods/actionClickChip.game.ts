@@ -15,8 +15,14 @@ export const actionClickChip = (game: IGame, player: Player, row: number, col: n
             if (box.chip.player?.name === player.name) {
               box.addChip(player);
               return resolve(true);
+            } else {
+              console.log('chip is same the player => false');
             }
+          } else {
+            console.log('chip existence => false');
           }
+        } else {
+          console.log('box existence => false');
         }
       }
       return resolve(false);
