@@ -1,13 +1,20 @@
-import Game, { IObjectGame } from '@class/game.class';
 import { IAddPlayer } from '@class/player.class';
 import Room from '@class/room.class';
 import { socketgame } from '@connection/socket';
+import { IError } from '@listeners/interfaces';
+import { game_error, join_room } from '@listeners/list';
 import { Socket } from 'socket.io';
 
 export const joinRoom = async (socket : Socket, player: IAddPlayer, room: string) => {
-  await socketgame.joinRoom(socket,player,room);
-  // if (find_game) {
-  //   const game : IObjectGame = find_game.getObjectGame();
-  //   socket.emit('join-room', game);
-  // }
+
+  try {
+    if(!socket.data.room){
+      await socketgame.joinRoom(socket,player,room);
+      socket.emit(join_room,'logeado')
+    }
+  } catch (error) {
+    console.log(error);
+    const error_message : IError = {type:'room', action:'create', message: 'error al unirte a la sala'};
+    socket.emit(game_error,error_message);
+  }
 };

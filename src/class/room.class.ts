@@ -58,17 +58,17 @@ class Room {
     })
   }
 
-  public findPlayerInRoom (player : Player) : Player | undefined {
+  public findPlayerInRoom (player_name : string) : Player | undefined {
     const player_found = this._players.find(
       (element : Player) =>
-        element.name === player.name
+        element.name === player_name
     )
     return player_found || undefined;
   }
 
   public joinPlayerToGame (host: Player, player: Player) {
     if(host.socket.id === this.host.socket.id){
-      const player_added = this.findPlayerInRoom(player)
+      const player_added = this.findPlayerInRoom(player.name)
       if(player_added){
         this._game.addPlayerToGame(player_added)
       }
@@ -86,6 +86,11 @@ class Room {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private listenHostActtions () {
+    const socket = this._host.socket
+    // acciones que puede escuchar solo el host de la room
   }
 
 }

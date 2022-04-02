@@ -2,13 +2,12 @@
 // import Player from '@class/player.class';
 // import Game from '@class/game.class';
 import { io, server, port } from '@connection/socket';
-import { connection } from 'listeners';
 
 // io.on('connection')
 
 server.listen(port);
 // io.listen(port);
-io.on('connection', connection);
+// io.on('connection', connection);
 // io.in('asd').emit('aa', 'probando');
 // console.log('socket rooms =>', io.sockets.adapter.rooms);
 

@@ -1,3 +1,5 @@
+import Game from '@class/game.class';
+import Player from '@class/player.class';
 import { Socket } from 'socket.io';
 
 interface Position {
@@ -6,7 +8,12 @@ interface Position {
 }
 
 export const addChip = (socket : Socket, data : Position) => {
-  console.log('socket =>', socket);
-  console.log(data);
-  console.log('gameroom =>', socket.data.gameroom);
+  const game : Game = socket.data.game;
+  const player : Player = socket.data.player;
+  const {row,col} = data
+  if(game){
+    if(player){
+      game.actionClickChip(player,row,col)
+    }
+  }
 };

@@ -1,3 +1,4 @@
+import { add_chip } from "@listeners/list";
 import { randomString } from "@utilities/random_string.utility";
 import { Socket } from "socket.io";
 
@@ -26,12 +27,16 @@ class Player {
   private _color : string;
   private _socket: Socket
   private _turn : number;
+  private _address: string;
 
   constructor (name: string, color: string, socket: Socket) {
     this._id = randomString(6);
     this._name = name;
     this._color = color;
     this._socket = socket;
+    this._socket.data.player = this;
+    this._address = socket.handshake.address;
+    this.listenActions()
   }
 
   public get name () : string {
@@ -58,6 +63,10 @@ class Player {
     this._socket = socket;
   }
 
+  public get address () : string {
+    return this._address;
+  }
+
   public getPlayer = () : IPlayer => {
     return {
       id: this._id,
@@ -74,6 +83,11 @@ class Player {
       color: this._color,
       turn: this._turn,
     };
+  }
+
+  private listenActions() {
+    const socket = this._socket
+    socket.on(add_chip,(data)=>console.log(data));
   }
 }
 
