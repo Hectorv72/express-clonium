@@ -1,6 +1,6 @@
 import Board, { IObjectBoard } from '@class/board.class';
 // import Box from '@class/box.class';
-import Player, { IAddPlayer, IObjectPlayer, IPlayer } from '@class/player.class';
+import Player, { IObjectPlayer } from '@class/player.class';
 import { actionClickChip } from './methods/actionClickChip.game';
 import { watchChanges } from './methods/watchChanges.game';
 
@@ -100,7 +100,9 @@ class Game {
           (player : Player, key : number) => {
             const [row,col] = positions[key]
             const box = this._gameboard.getPositionBox(row,col);
-            box?.addChip(player)
+            if(box){
+              box.addChip(player)
+            }
           }
         );
         resolve(true)

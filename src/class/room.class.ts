@@ -58,17 +58,24 @@ class Room {
     })
   }
 
-  public findPlayerInRoom (player_name : string) : Player | undefined {
-    const player_found = this._players.find(
-      (element : Player) =>
-        element.name === player_name
-    )
-    return player_found || undefined;
+  public findPlayerInRoom (player_name : string) : Promise<Player | undefined> {
+    return new Promise((resolve,reject)=>{
+      try {
+        const player_found = this._players.find(
+        (element : Player) =>
+          element.name === player_name
+        )
+        return resolve(player_found || undefined);
+      } catch (error) {
+        reject (error)
+      }
+      
+    })
   }
 
-  public joinPlayerToGame (host: Player, player: Player) {
+  public async joinPlayerToGame (host: Player, player: Player) {
     if(host.socket.id === this.host.socket.id){
-      const player_added = this.findPlayerInRoom(player.name)
+      const player_added = await this.findPlayerInRoom(player.name)
       if(player_added){
         this._game.addPlayerToGame(player_added)
       }

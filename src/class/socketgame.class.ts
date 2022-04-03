@@ -1,8 +1,9 @@
-import { create_room } from '@listeners/list';
+import { create_player, create_room } from '@listeners/list';
 import { createRoom } from '@listeners/receivers';
+import { createPlayer } from '@listeners/receivers/create_player';
 import { randomString } from '@utilities/random_string.utility';
 import { Server, Socket } from 'socket.io';
-import Player, { IAddPlayer } from './player.class';
+import Player, { IPlayer } from './player.class';
 import Room from './room.class';
 class SocketGame {
   private _rooms : Array<Room> = [];
@@ -35,21 +36,22 @@ class SocketGame {
     })
   }
 
-  public async joinRoom (socket: Socket, player: IAddPlayer, room: string) {
+  public async joinRoom (socket: Socket, room: string) {
     try {
-      const exists = await this.findRoom(room);
-      if(exists){
-        const { name, color } = player;
-        const exists_player = exists.findPlayerInRoom(name)
-        if(name && color){
-          const new_player = new Player(player.name,player.color, socket);
-          const player_added = await exists.addPlayerToRoom(new_player);
+      const room_find = await this.findRoom(room);
+      if(room_find){
+        const player = socket.data.player;
+        const { name } = player;
+        const player_inroom = await room_find.findPlayerInRoom(name);
+        if(!player_inroom){
+          const player_added = await room_find.addPlayerToRoom(player);
           if(player_added){
-            socket.join(exists.room);
-            socket.data.room = exists;
+            socket.join(room_find.room);
+            socket.data.room = room_find;
+            return room_find
           }
         } else {
-          throw new Error('El usuario no tiene datos suficientes')
+          throw new Error('El usuario ya está en la room')
         }
       } else {
         throw new Error('La sala no existe')
@@ -60,32 +62,41 @@ class SocketGame {
     
   }
 
-  public async createRoom (socket: Socket, player: IAddPlayer) : Promise<string | undefined> {
+  public async createRoom (socket: Socket) : Promise<string | undefined> {
     try {
       const room_string : string = randomString(this._room_length);
       const exists = await this.findRoom(room_string) !== undefined;
+
       if(!exists){
-        const { name, color } = player
-        if(name && color){
-          const host = new Player(name,color, socket);
-          const room = new Room(host,[host],room_string);
+        const player : Player = socket.data.player
+        if(player){
+          const room = new Room(player,[player],room_string);
           this._rooms.push(room)
+
+          socket.join(room.room);
           socket.data.room = room;
           return room_string;
-        } else {
-          throw new Error('El usuario no tiene datos suficientes')
         }
       }
+
+      throw new Error('No se cumplieron las condiciones');
     } catch (error) {
       throw error
     }
+  }
+
+  public createPlayer (socket : Socket,name : string) {
+    const player = new Player(socket,name);
+    socket.data.player = player;
   }
 
   private onConnection(socket : Socket){
     console.log('usuario conectado => ',socket.id)
     const address = socket.handshake.address;
     console.log('ip =>',address)
-    socket.on(create_room, (player : IAddPlayer) => createRoom(socket,player))
+    // listeners
+    socket.on(create_room, () => createRoom(socket))
+    socket.on(create_player,(name) => createPlayer(socket,name))
   }
 
   private listenConnections(){

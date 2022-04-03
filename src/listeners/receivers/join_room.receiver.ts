@@ -1,16 +1,16 @@
-import { IAddPlayer } from '@class/player.class';
-import Room from '@class/room.class';
 import { socketgame } from '@connection/socket';
 import { IError } from '@listeners/interfaces';
 import { game_error, join_room } from '@listeners/list';
 import { Socket } from 'socket.io';
 
-export const joinRoom = async (socket : Socket, player: IAddPlayer, room: string) => {
+export const joinRoom = async (socket : Socket, room: string) => {
 
   try {
     if(!socket.data.room){
-      await socketgame.joinRoom(socket,player,room);
-      socket.emit(join_room,'logeado')
+      const room_joined = await socketgame.joinRoom(socket,room);
+      if(room_joined){
+        socket.emit(join_room,room_joined.room)
+      }
     }
   } catch (error) {
     console.log(error);

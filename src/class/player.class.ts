@@ -8,10 +8,10 @@ export interface IObjectPlayer {
   turn: number
 }
 
-export interface IAddPlayer{
-  name: string,
-  color: string
-}
+// export interface IAddPlayer{
+//   name: string,
+//   color?: string
+// }
 
 export interface IPlayer {
   id: string,
@@ -29,10 +29,9 @@ class Player {
   private _turn : number;
   private _address: string;
 
-  constructor (name: string, color: string, socket: Socket) {
+  constructor (socket: Socket, name: string) {
     this._id = randomString(6);
     this._name = name;
-    this._color = color;
     this._socket = socket;
     this._socket.data.player = this;
     this._address = socket.handshake.address;
@@ -67,6 +66,14 @@ class Player {
     return this._address;
   }
 
+  public set color (color: string) {
+    this._color = color;
+  }
+
+  public get color () : string {
+    return this._color;
+  }
+
   public getPlayer = () : IPlayer => {
     return {
       id: this._id,
@@ -88,6 +95,11 @@ class Player {
   private listenActions() {
     const socket = this._socket
     socket.on(add_chip,(data)=>console.log(data));
+  }
+
+  public updateGameValues (name: string, color: string) {
+    this._name = name;
+    this._color = color;
   }
 }
 
