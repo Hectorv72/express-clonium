@@ -1,6 +1,6 @@
-import { create_player, create_room } from '@listeners/list';
-import { createRoom } from '@listeners/receivers';
-import { createPlayer } from '@listeners/receivers/create_player';
+import { IError } from '@listeners/interfaces';
+import { create_player, create_room, game_error, get_player } from '@listeners/list';
+import { createPlayer, createRoom, getPlayer } from '@listeners/receivers';
 import { randomString } from '@utilities/random_string.utility';
 import { Server, Socket } from 'socket.io';
 import Player, { IPlayer } from './player.class';
@@ -78,6 +78,9 @@ class SocketGame {
           return room_string;
         }
       }
+      
+      const error_message : IError = {type:'room', action:'create', message: 'Error al crear la room'};
+      socket.emit(game_error,error_message);
 
       throw new Error('No se cumplieron las condiciones');
     } catch (error) {
@@ -97,6 +100,7 @@ class SocketGame {
     // listeners
     socket.on(create_room, () => createRoom(socket))
     socket.on(create_player,(name) => createPlayer(socket,name))
+    socket.on(get_player,() => getPlayer(socket))
   }
 
   private listenConnections(){
